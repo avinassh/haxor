@@ -6,7 +6,7 @@ with open('requirements.txt') as f:
     requirements = f.read().splitlines()
 
 with open('README.rst') as f:
-    long_description = f.read('README.rst')
+    long_description = f.read()
 
 version = '0.1.0'
 
