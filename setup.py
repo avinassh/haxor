@@ -23,6 +23,7 @@ setup(
         'Operating System :: POSIX',
         'Intended Audience :: Developers',
         'Natural Language :: English',
+        'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
