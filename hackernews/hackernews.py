@@ -13,20 +13,35 @@ import json
 
 import requests
 
+from settings import supported_api_versions
+
+
 class InvalidItemID(Exception):
     pass
 
+
 class InvalidUserID(Exception):
+    pass
+
+
+class InvalidAPIVersion(Exception):
     pass
 
 
 class HackerNews(object):
 
     def __init__(self, version='v0'):
-        self.base_url = 'https://hacker-news.firebaseio.com/{}/'.format(version)
+        try:
+            self.base_url = supported_api_versions[version]
+        except KeyError:
+            raise InvalidAPIVersion
 
     def _get(self, url):
-        return requests.get(url)
+        response = requests.get(url)
+        if response.status_code == requests.codes.ok:
+            return response
+        else:
+            raise Exception('HTTP Error: {}'.format(response.status_code))
 
     def get_item(self, item_id):
         response = self._get('{0}item/{1}.json'.format(self.base_url, item_id))
@@ -35,7 +50,7 @@ class HackerNews(object):
             raise InvalidItemID
 
         return Item(response.json())
-        
+
     def get_user(self, user_id):
         response = self._get('{0}user/{1}.json'.format(self.base_url, user_id))
 
@@ -52,7 +67,9 @@ class HackerNews(object):
         response = self._get('{}maxitem.json'.format(self.base_url))
         return response.json()
 
+
 class Item(object):
+
     """
     Represents stories, comments, jobs, Ask HNs and polls
     """
@@ -62,7 +79,10 @@ class Item(object):
         self.deleted = data.get('deleted')
         self.item_type = data.get('type')
         self.by = data.get('by')
-        self.submission_time = datetime.datetime.fromtimestamp(data.get('time', 0))
+        self.submission_time = datetime.datetime.fromtimestamp(
+            data.get(
+                'time',
+                0))
         self.text = data.get('text')
         self.dead = data.get('dead')
         self.parent = data.get('parent')
@@ -76,7 +96,9 @@ class Item(object):
     def __repr__(self):
         return '{0}: {1}'.format(self.item_id, self.title)
 
+
 class User(object):
+
     """
     Represents a hacker i.e. a user on Hacker News
     """
