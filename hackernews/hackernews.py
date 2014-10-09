@@ -13,6 +13,13 @@ import json
 
 import requests
 
+class InvalidItemID(Exception):
+    pass
+
+class InvalidUserID(Exception):
+    pass
+
+
 class HackerNews(object):
 
     def __init__(self, version='v0'):
@@ -21,15 +28,20 @@ class HackerNews(object):
     def _get(self, url):
         return requests.get(url)
 
-    def _json2obj(self, json_data):
-        pass
-
     def get_item(self, item_id):
         response = self._get('{0}item/{1}.json'.format(self.base_url, item_id))
+
+        if not response.json():
+            raise InvalidItemID
+
         return Item(response.json())
         
     def get_user(self, user_id):
         response = self._get('{0}user/{1}.json'.format(self.base_url, user_id))
+
+        if not response.json():
+            raise InvalidUserID
+
         return User(response.json())
 
     def top_stories(self, limit=None):
