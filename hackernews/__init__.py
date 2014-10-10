@@ -12,6 +12,7 @@ from __future__ import absolute_import
 from __future__ import unicode_literals
 import datetime
 import json
+import sys
 
 import requests
 
@@ -173,7 +174,10 @@ class Item(object):
         self.raw = json.dumps(data)
 
     def __repr__(self):
-        return '{0}: {1}'.format(self.item_id, self.title)
+        retval = '<hackernews.Item: {0} - {1}>'.format(self.item_id, self.title)
+        if sys.version_info.major < 3:
+            return retval.encode('utf-8',errors='backslashreplace')
+        return retval
 
 
 class User(object):
@@ -192,4 +196,7 @@ class User(object):
         self.raw = json.dumps(data)
 
     def __repr__(self):
-        return '{0}: {1}'.format(self.user_id, self.karma)
+        retval = '<hackernews.User: {0}>'.format(self.user_id)
+        if sys.version_info.major < 3:
+            return retval.encode('utf-8',errors='backslashreplace')
+        return retval
