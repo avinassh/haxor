@@ -43,12 +43,32 @@ class HTTPError(Exception):
 class HackerNews(object):
 
     def __init__(self, version='v0'):
+        """
+        Args:
+            version (string): specifies Hacker News API version. Default is `v0`.
+
+        Raises:
+          InvalidAPIVersion: If Hacker News version is not supported.
+
+        """
         try:
             self.base_url = supported_api_versions[version]
         except KeyError:
             raise InvalidAPIVersion
 
     def _get(self, url):
+        """Internal method used for GET requests
+
+        Args:
+            url (string): URL to send GET.
+
+        Returns:
+            requests' response object
+
+        Raises:
+          HTTPError: If HTTP request failed.
+
+        """
         response = requests.get(url)
         if response.status_code == requests.codes.ok:
             return response
@@ -56,6 +76,19 @@ class HackerNews(object):
             raise HTTPError
 
     def get_item(self, item_id):
+        """Returns Hacker News `Item` object.
+
+        Args:
+            item_id (int or string): Unique item id of Hacker News story, comment etc.
+
+        Returns:
+            `Item` object representing Hacker News item.
+
+        Raises:
+          InvalidItemID: If corresponding Hacker News story does not exist.
+
+        """
+
         response = self._get('{0}item/{1}.json'.format(self.base_url, item_id))
 
         if not response.json():
@@ -64,6 +97,18 @@ class HackerNews(object):
         return Item(response.json())
 
     def get_user(self, user_id):
+        """Returns Hacker News `User` object.
+
+        Args:
+            user_id (string): unique user id of a Hacker News user.
+
+        Returns:
+            `User` object representing a user on Hacker News.
+
+        Raises:
+          InvalidUserID: If no such user exists on Hacker News.
+
+        """
         response = self._get('{0}user/{1}.json'.format(self.base_url, user_id))
 
         if not response.json():
@@ -72,10 +117,26 @@ class HackerNews(object):
         return User(response.json())
 
     def top_stories(self, limit=None):
+        """Returns list of item ids of current top stories
+
+        Args:
+            limit (int): specifies the number of stories to be returned.
+
+        Returns:
+            `list` object containing ids of top stories.
+        """
         response = self._get('{}topstories.json'.format(self.base_url))
         return response.json()[:limit]
 
     def get_max_item(self):
+        """Returns list of item ids of current top stories
+
+        Args:
+            limit (int): specifies the number of stories to be returned.
+
+        Returns:
+            `int` if successful.
+        """
         response = self._get('{}maxitem.json'.format(self.base_url))
         return response.json()
 
