@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+from __future__ import absolute_import
+from __future__ import unicode_literals
 
 __all__ = [
     'User',
@@ -21,7 +23,7 @@ import json
 
 import requests
 
-from settings import supported_api_versions
+from .settings import supported_api_versions
 
 
 class InvalidItemID(Exception):
