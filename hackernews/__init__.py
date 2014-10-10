@@ -176,7 +176,7 @@ class Item(object):
     def __repr__(self):
         retval = '<hackernews.Item: {0} - {1}>'.format(self.item_id, self.title)
         if sys.version_info.major < 3:
-            return retval.encode('utf-8',errors='backslashreplace')
+            return retval.encode('utf-8', errors='backslashreplace')
         return retval
 
 
@@ -198,5 +198,5 @@ class User(object):
     def __repr__(self):
         retval = '<hackernews.User: {0}>'.format(self.user_id)
         if sys.version_info.major < 3:
-            return retval.encode('utf-8',errors='backslashreplace')
+            return retval.encode('utf-8', errors='backslashreplace')
         return retval
