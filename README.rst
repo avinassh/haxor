@@ -62,16 +62,32 @@ To get current largest item id:
 Examples
 --------
 
-Getting top 10 stories: 
+Get top 10 stories: 
 
 ::
 
-    for story in hn.top_stories(limit=10):
-        print hn.get_item(story)
+    for story_id in hn.top_stories(limit=10):
+        print hn.get_item(story_id)
 
-    # 8432709: Redis cluster, no longer vaporware
-    # 8432423: Fluid Actuators from Disney Research Make Soft, Safe Robot Arms
-    # 8433237: Is Capturing Carbon from the Air Practical?
+    # <hackernews.Item: 8432709 - Redis cluster, no longer vaporware>
+    # <hackernews.Item: 8432423 - Fluid Actuators from Disney Research Make Soft, Safe Robot Arms>
+    # <hackernews.Item: 8433237 - Is Capturing Carbon from the Air Practical?>
+    # ...
+    # ...
+
+
+Find all the 'jobs' post from Top Stories:
+
+::
+
+    for story_id in hn.top_stories():
+        story = hn.get_item(story_id)
+        if story.item_type == 'job':
+            print story
+
+    # <hackernews.Item: 8437631 - Lever (YC S12) hiring JavaScript experts, realtime systems engineers, to scale DerbyJS>
+    # <hackernews.Item: 8437036 - Product Designer (employee #1) to Organize the World's Code – Blockspring (YC S14)>
+    # <hackernews.Item: 8436584 - Django and iOS Hackers Needed – fix healthcare with Drchrono>
     # ...
     # ...
 
