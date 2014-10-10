@@ -36,6 +36,10 @@ class InvalidAPIVersion(Exception):
     pass
 
 
+class HTTPError(Exception):
+    pass
+
+
 class HackerNews(object):
 
     def __init__(self, version='v0'):
@@ -49,7 +53,7 @@ class HackerNews(object):
         if response.status_code == requests.codes.ok:
             return response
         else:
-            raise Exception('HTTP Error: {}'.format(response.status_code))
+            raise HTTPError
 
     def get_item(self, item_id):
         response = self._get('{0}item/{1}.json'.format(self.base_url, item_id))
