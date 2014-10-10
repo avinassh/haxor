@@ -189,7 +189,7 @@ class User(object):
     def __init__(self, data):
         self.user_id = data.get('id')
         self.delay = data.get('delay')
-        self.created = datetime.datetime.fromtimestamp(data.get('time', 0))
+        self.created = datetime.datetime.fromtimestamp(data.get('created', 0))
         self.karma = data.get('karma')
         self.about = data.get('about')
         self.submitted = data.get('submitted')
