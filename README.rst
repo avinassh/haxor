@@ -59,22 +59,56 @@ To get current largest item id:
     # >>> max_item
     # 8433746
 
-Example usage:
+Examples
+--------
+
+Getting top 10 stories: 
 
 ::
 
-    for story in hn.top_stories(limit=3):
+    for story in hn.top_stories(limit=10):
         print hn.get_item(story)
 
     # 8432709: Redis cluster, no longer vaporware
     # 8432423: Fluid Actuators from Disney Research Make Soft, Safe Robot Arms
     # 8433237: Is Capturing Carbon from the Air Practical?
+    # ...
+    # ...
+
+
+Find Python jobs from monthly who is hiring thread:
+
+::
+
+    # Who is hiring
+    # https://news.ycombinator.com/item?id=8422599
+
+    who_is_hiring = hn.get_item(8394339)
+
+    for comment_id in who_is_hiring.kids:
+        comment = hn.get_item(comment_id)
+        if 'python' in comment.text.lower():
+            print comment.item_id
+
+    # 8395568
+    # 8394964
+    # ...
+    # ...
+
 
 API Reference
 -------------
 
 Class: ``HackerNews``
 ---------------------
+
+**Parameters:**
+
++-------------+--------+------------+--------------------------------------------------+-----------+
+| Name        | Type   | Required   | Description                                      | Default   |
++=============+========+============+==================================================+===========+
+| ``version`` | string | No         | specifies Hacker News API version                | ``v0``    |
++-------------+--------+------------+--------------------------------------------------+-----------+
 
 ``get_item``
 ^^^^^^^^^^^^
