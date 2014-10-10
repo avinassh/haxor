@@ -8,7 +8,7 @@ with open('requirements.txt') as f:
 with open('README.rst') as f:
     long_description = f.read()
 
-version = '0.1.1'
+version = '0.2.0'
 
 setup(
     name='haxor',
