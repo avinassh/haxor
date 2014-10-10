@@ -1,14 +1,4 @@
 #!/usr/bin/env python
-from __future__ import absolute_import
-from __future__ import unicode_literals
-
-__all__ = [
-    'User',
-    'Item',
-    'HackerNews',
-    'InvalidAPIVersion',
-    'InvalidItemID',
-    'InvalidUserID']
 
 """
 haxor
@@ -18,12 +8,22 @@ Unofficial Python wrapper for official Hacker News API
 @email a@sajjanshetty.com
 """
 
+from __future__ import absolute_import
+from __future__ import unicode_literals
 import datetime
 import json
 
 import requests
 
 from .settings import supported_api_versions
+
+__all__ = [
+    'User',
+    'Item',
+    'HackerNews',
+    'InvalidAPIVersion',
+    'InvalidItemID',
+    'InvalidUserID']
 
 
 class InvalidItemID(Exception):
