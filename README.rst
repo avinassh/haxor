@@ -81,7 +81,7 @@ Find Python jobs from monthly who is hiring thread:
 ::
 
     # Who is hiring
-    # https://news.ycombinator.com/item?id=8422599
+    # https://news.ycombinator.com/item?id=8394339
 
     who_is_hiring = hn.get_item(8394339)
 
