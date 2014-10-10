@@ -4,7 +4,7 @@ haxor
 .. image:: https://api.travis-ci.org/avinassh/haxor.png?branch=master
     :target: http://travis-ci.org/avinassh/haxor
 .. image:: https://coveralls.io/repos/avinassh/haxor/badge.png?branch=master
-    :target: https://coveralls.io/r/avinassh/haxor
+    :target: https://coveralls.io/r/avinassh/haxor?branch=master
 .. image:: https://pypip.in/v/haxor/badge.png
     :target: https://pypi.python.org/pypi/haxor/
 .. image:: https://pypip.in/d/haxor/badge.png
