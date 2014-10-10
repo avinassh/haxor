@@ -75,6 +75,12 @@ class HackerNews(object):
         else:
             raise HTTPError
 
+    def _get_page(self, page):
+        return self._get('{0}{1}.json'.format(self.base_url, page))
+
+    def _get_page_param(self, page, param):
+        return self._get('{0}{1}/{2}.json'.format(self.base_url, page, param))
+
     def get_item(self, item_id):
         """Returns Hacker News `Item` object.
 
@@ -89,12 +95,12 @@ class HackerNews(object):
 
         """
 
-        response = self._get('{0}item/{1}.json'.format(self.base_url, item_id))
+        response = self._get_page_param('item', item_id).json()
 
-        if not response.json():
+        if not response:
             raise InvalidItemID
 
-        return Item(response.json())
+        return Item(response)
 
     def get_user(self, user_id):
         """Returns Hacker News `User` object.
@@ -109,12 +115,12 @@ class HackerNews(object):
           InvalidUserID: If no such user exists on Hacker News.
 
         """
-        response = self._get('{0}user/{1}.json'.format(self.base_url, user_id))
+        response = self._get_page_param('user', user_id).json()
 
-        if not response.json():
+        if not response:
             raise InvalidUserID
 
-        return User(response.json())
+        return User(response)
 
     def top_stories(self, limit=None):
         """Returns list of item ids of current top stories
@@ -125,8 +131,7 @@ class HackerNews(object):
         Returns:
             `list` object containing ids of top stories.
         """
-        response = self._get('{}topstories.json'.format(self.base_url))
-        return response.json()[:limit]
+        return self._get_page('topstories').json()[:limit]
 
     def get_max_item(self):
         """Returns list of item ids of current top stories
@@ -137,8 +142,7 @@ class HackerNews(object):
         Returns:
             `int` if successful.
         """
-        response = self._get('{}maxitem.json'.format(self.base_url))
-        return response.json()
+        return self._get_page('maxitem').json()
 
 
 class Item(object):
