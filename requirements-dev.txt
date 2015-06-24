@@ -1,0 +1,3 @@
+-r requirements.txt
+py==1.4.29
+pytest==2.7.2
