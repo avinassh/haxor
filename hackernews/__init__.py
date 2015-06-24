@@ -5,7 +5,7 @@ haxor
 Unofficial Python wrapper for official Hacker News API
 
 @author avinash sajjanshetty
-@email a@sajjanshetty.com
+@email hi@avi.im
 """
 
 from __future__ import absolute_import
@@ -136,6 +136,59 @@ class HackerNews(object):
         """
         return self._get_page('topstories').json()[:limit]
 
+    def new_stories(self, limit=None):
+        """Returns list of item ids of current new stories
+
+        Args:
+            limit (int): specifies the number of stories to be returned.
+
+        Returns:
+            `list` object containing ids of new stories.
+        """
+        return self._get_page('newstories').json()[:limit]
+
+    def ask_stories(self, limit=None):
+        """Returns list of item ids of latest Ask HN stories
+
+        Args:
+            limit (int): specifies the number of stories to be returned.
+
+        Returns:
+            `list` object containing ids of Ask HN stories.
+        """
+        return self._get_page('askstories').json()[:limit]
+
+    def show_stories(self, limit=None):
+        """Returns list of item ids of latest Show HN stories
+
+        Args:
+            limit (int): specifies the number of stories to be returned.
+
+        Returns:
+            `list` object containing ids of Show HN stories.
+        """
+        return self._get_page('showstories').json()[:limit]
+
+    def job_stories(self, limit=None):
+        """Returns list of item ids of latest Job stories
+
+        Args:
+            limit (int): specifies the number of stories to be returned.
+
+        Returns:
+            `list` object containing ids of Job stories.
+        """
+        return self._get_page('jobstories').json()[:limit]
+
+    def updates(self):
+        """Returns list of item ids and user ids that have been
+        changed/updated recently.
+
+        Returns:
+            `dict` with two keys whose values are `list` objects
+        """
+        return self._get_page('updates').json()
+
     def get_max_item(self):
         """Returns list of item ids of current top stories
 
@@ -174,7 +227,8 @@ class Item(object):
         self.raw = json.dumps(data)
 
     def __repr__(self):
-        retval = '<hackernews.Item: {0} - {1}>'.format(self.item_id, self.title)
+        retval = '<hackernews.Item: {0} - {1}>'.format(
+            self.item_id, self.title)
         if sys.version_info.major < 3:
             return retval.encode('utf-8', errors='backslashreplace')
         return retval
