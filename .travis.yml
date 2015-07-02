@@ -4,8 +4,8 @@ python:
   - 3.3
 install:
   - pip install -r requirements.txt
-  - pip install coveralls
+  - pip install coveralls pytest pytest-cov
 script:
-  coverage run --source=hackernews setup.py test
+  py.test
 after_success:
   coveralls
