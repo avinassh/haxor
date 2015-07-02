@@ -1,5 +1,5 @@
 -r requirements.txt
-pyandoc==0.0.1
+pypandoc==0.9.8
 py==1.4.29
 pytest==2.7.2
 pytest-sugar==0.4.0
