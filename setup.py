@@ -2,13 +2,16 @@
 
 from setuptools import setup, find_packages
 
+try:
+    import pypandoc
+    long_description = pypandoc.convert('README.md', 'rst')
+except (IOError, ImportError):
+    long_description = open('README.md').read()
+
 with open('requirements.txt') as f:
     requirements = f.read().splitlines()
 
-with open('README.rst') as f:
-    long_description = f.read()
-
-version = '0.2.2'
+version = '0.3.1'
 
 setup(
     name='haxor',
@@ -35,6 +38,8 @@ setup(
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
         'Topic :: Internet',
         'Topic :: Software Development :: Libraries',
         'Topic :: Software Development :: Libraries :: Python Modules',
