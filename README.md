@@ -1,11 +1,8 @@
 #haxor
 
 [![image](https://api.travis-ci.org/avinassh/haxor.png?branch=master)](http://travis-ci.org/avinassh/haxor)
-
 [![image](https://coveralls.io/repos/avinassh/haxor/badge.png?branch=master)](https://coveralls.io/r/avinassh/haxor?branch=master)
-
 [![image](https://pypip.in/v/haxor/badge.png)](https://pypi.python.org/pypi/haxor/)
-
 [![image](https://pypip.in/d/haxor/badge.png)](https://pypi.python.org/pypi/haxor/)
 
 Unofficial Python wrapper for official Hacker News API.
@@ -145,7 +142,61 @@ Description: Returns list of item ids of current top stories
 | Name      | Type  | Required  | Description                           | Default
 | --------- | ----- | --------- | ------------------------------------- | --------
 | `limit`   | int   | No        | specifies the number of stories to be returned  | None
+
+
+`new_stories`
+-------------
+
+Description: Returns list of item ids of current new stories
+
+**Parameters:**
+
+| Name      | Type  | Required  | Description                           | Default
+| --------- | ----- | --------- | ------------------------------------- | --------
+| `limit`   | int   | No        | specifies the number of stories to be returned  | None
                                                             
+
+`ask_stories`
+-------------
+
+Description: Returns list of item ids of latest Ask HN stories
+
+**Parameters:**
+
+| Name      | Type  | Required  | Description                           | Default
+| --------- | ----- | --------- | ------------------------------------- | --------
+| `limit`   | int   | No        | specifies the number of stories to be returned  | None
+
+
+`show_stories`
+-------------
+
+Description: Returns list of item ids of latest Show HN stories
+
+**Parameters:**
+
+| Name      | Type  | Required  | Description                           | Default
+| --------- | ----- | --------- | ------------------------------------- | --------
+| `limit`   | int   | No        | specifies the number of stories to be returned  | None
+
+
+`job_stories`
+-------------
+
+Description: Returns list of item ids of latest Job stories
+
+**Parameters:**
+
+| Name      | Type  | Required  | Description                           | Default
+| --------- | ----- | --------- | ------------------------------------- | --------
+| `limit`   | int   | No        | specifies the number of stories to be returned  | None
+
+
+`updates`
+--------------
+
+Description: Returns list of item ids and user ids that have been changed/updated recently.
+
 
 `get_max_item`
 --------------
@@ -204,7 +255,7 @@ LICENSE
 
     The MIT License (MIT)
 
-    Copyright (c) 2014 Avinash Sajjanshetty <hi@avi.im>
+    Copyright (c) 2014-15 Avinash Sajjanshetty <hi@avi.im>
 
     Permission is hereby granted, free of charge, to any person obtaining a
     copy of this software and associated documentation files (the
