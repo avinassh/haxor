@@ -1,9 +1,10 @@
 #haxor
 
-[![image](https://api.travis-ci.org/avinassh/haxor.png?branch=master)](http://travis-ci.org/avinassh/haxor)
-[![image](https://coveralls.io/repos/avinassh/haxor/badge.png?branch=master)](https://coveralls.io/r/avinassh/haxor?branch=master)
-[![image](https://pypip.in/v/haxor/badge.png)](https://pypi.python.org/pypi/haxor/)
-[![image](https://pypip.in/d/haxor/badge.png)](https://pypi.python.org/pypi/haxor/)
+[![travis](https://img.shields.io/travis/avinassh/haxor.svg)](http://travis-ci.org/avinassh/haxor)
+[![coverall](https://img.shields.io/coveralls/avinassh/haxor.svg)](https://coveralls.io/r/avinassh/haxor?branch=master)
+[![version](https://img.shields.io/pypi/v/haxor.svg)](https://pypi.python.org/pypi/haxor/)
+[![supported](https://img.shields.io/pypi/pyversions/haxor.svg)](https://pypi.python.org/pypi/haxor/)
+![license](https://img.shields.io/pypi/l/haxor.svg)
 
 Unofficial Python wrapper for official Hacker News API.
 
