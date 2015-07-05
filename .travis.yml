@@ -5,7 +5,8 @@ python:
   - 3.4
 install:
   - pip install -r requirements.txt
-  - pip install pytest==2.7.2 pytest-sugar==0.4.0 pytest-pep8==1.0.6 coveralls==0.5
+  - pip install pytest==2.7.2 pytest-sugar==0.4.0 pytest-pep8==1.0.6 pytest-cov==1.8.1 
+  - pip install coveralls==0.5
 script:
   py.test tests --doctest-modules --pep8 -v --cov-report term-missing --cov=hackernews
 after_success:
