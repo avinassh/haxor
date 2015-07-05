@@ -23,7 +23,8 @@ class TestGetUser(unittest.TestCase):
         user = self.hn.get_user('pg')
         self.assertIsInstance(user, User)
         self.assertEqual(user.user_id, 'pg')
-        self.assertEqual(user.created, datetime.datetime.fromtimestamp(1160418092))
+        self.assertEqual(user.created,
+                         datetime.datetime.fromtimestamp(1160418092))
 
 if __name__ == '__main__':
     unittest.main()
