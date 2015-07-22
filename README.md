@@ -10,28 +10,28 @@ Unofficial Python wrapper for official Hacker News API.
 
 Installation
 ============
-
+```python
     pip install haxor
-
+```
 Usage
 =====
 
 import and initialization:
-
+```python
     from hackernews import HackerNews
     hn = HackerNews()
-
+```
 Get certain user info by user id (i.e. username on Hacker News)
-
+```python
     user = hn.get_user('pg')
     # >>> user.user_id
     # pg
     # >>> user.karma
     # 155040
-
+```
 Stories, comments, jobs, Ask HNs and even polls are just items and they
 have unique item id. To get info of an item by item id:
-
+```python
     item = hn.get_item(8863)
     # >>> item.title
     # "My YC app: Dropbox - Throw away your USB drive"
@@ -39,24 +39,24 @@ have unique item id. To get info of an item by item id:
     # story
     # >>> item.kids
     # [ 8952, 9224, 8917, ...]
-
+```
 To get item ids of current top stories:
-
+```python
     top_story_ids = hn.top_stories()
     # >>> top_story_ids
     # [8432709, 8432616, 8433237, ...]
-
+```
 To get current largest item id:
-
+```python
     max_item = hn.get_max_item()
     # >>> max_item
     # 8433746
-
+```
 Examples
 ========
 
 Get top 10 stories:
-
+```python
     for story_id in hn.top_stories(limit=10):
         print hn.get_item(story_id)
 
@@ -65,9 +65,9 @@ Get top 10 stories:
     # <hackernews.Item: 8433237 - Is Capturing Carbon from the Air Practical?>
     # ...
     # ...
-
+```
 Find all the 'jobs' post from Top Stories:
-
+```python
     for story_id in hn.top_stories():
         story = hn.get_item(story_id)
         if story.item_type == 'job':
@@ -78,9 +78,9 @@ Find all the 'jobs' post from Top Stories:
     # <hackernews.Item: 8436584 - Django and iOS Hackers Needed – fix healthcare with Drchrono>
     # ...
     # ...
-
+```
 Find Python jobs from monthly who is hiring thread:
-
+```python
     # Who is hiring
     # https://news.ycombinator.com/item?id=8394339
 
@@ -95,7 +95,7 @@ Find Python jobs from monthly who is hiring thread:
     # 8394964
     # ...
     # ...
-
+```
 API Reference
 =============
 
