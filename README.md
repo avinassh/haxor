@@ -11,90 +11,90 @@ Unofficial Python wrapper for official Hacker News API.
 Installation
 ============
 ```python
-    pip install haxor
+pip install haxor
 ```
 Usage
 =====
 
 import and initialization:
 ```python
-    from hackernews import HackerNews
-    hn = HackerNews()
+from hackernews import HackerNews
+hn = HackerNews()
 ```
 Get certain user info by user id (i.e. username on Hacker News)
 ```python
-    user = hn.get_user('pg')
-    # >>> user.user_id
-    # pg
-    # >>> user.karma
-    # 155040
+user = hn.get_user('pg')
+# >>> user.user_id
+# pg
+# >>> user.karma
+# 155040
 ```
 Stories, comments, jobs, Ask HNs and even polls are just items and they
 have unique item id. To get info of an item by item id:
 ```python
-    item = hn.get_item(8863)
-    # >>> item.title
-    # "My YC app: Dropbox - Throw away your USB drive"
-    # >>> item.type
-    # story
-    # >>> item.kids
-    # [ 8952, 9224, 8917, ...]
+item = hn.get_item(8863)
+# >>> item.title
+# "My YC app: Dropbox - Throw away your USB drive"
+# >>> item.type
+# story
+# >>> item.kids
+# [ 8952, 9224, 8917, ...]
 ```
 To get item ids of current top stories:
 ```python
-    top_story_ids = hn.top_stories()
-    # >>> top_story_ids
-    # [8432709, 8432616, 8433237, ...]
+top_story_ids = hn.top_stories()
+# >>> top_story_ids
+# [8432709, 8432616, 8433237, ...]
 ```
 To get current largest item id:
 ```python
-    max_item = hn.get_max_item()
-    # >>> max_item
-    # 8433746
+max_item = hn.get_max_item()
+# >>> max_item
+# 8433746
 ```
 Examples
 ========
 
 Get top 10 stories:
 ```python
-    for story_id in hn.top_stories(limit=10):
-        print hn.get_item(story_id)
+for story_id in hn.top_stories(limit=10):
+    print hn.get_item(story_id)
 
-    # <hackernews.Item: 8432709 - Redis cluster, no longer vaporware>
-    # <hackernews.Item: 8432423 - Fluid Actuators from Disney Research Make Soft, Safe Robot Arms>
-    # <hackernews.Item: 8433237 - Is Capturing Carbon from the Air Practical?>
-    # ...
-    # ...
+# <hackernews.Item: 8432709 - Redis cluster, no longer vaporware>
+# <hackernews.Item: 8432423 - Fluid Actuators from Disney Research Make Soft, Safe Robot Arms>
+# <hackernews.Item: 8433237 - Is Capturing Carbon from the Air Practical?>
+# ...
+# ...
 ```
 Find all the 'jobs' post from Top Stories:
 ```python
-    for story_id in hn.top_stories():
-        story = hn.get_item(story_id)
-        if story.item_type == 'job':
-            print story
+for story_id in hn.top_stories():
+    story = hn.get_item(story_id)
+    if story.item_type == 'job':
+        print story
 
-    # <hackernews.Item: 8437631 - Lever (YC S12) hiring JavaScript experts, realtime systems engineers, to scale DerbyJS>
-    # <hackernews.Item: 8437036 - Product Designer (employee #1) to Organize the World's Code – Blockspring (YC S14)>
-    # <hackernews.Item: 8436584 - Django and iOS Hackers Needed – fix healthcare with Drchrono>
-    # ...
-    # ...
+# <hackernews.Item: 8437631 - Lever (YC S12) hiring JavaScript experts, realtime systems engineers, to scale DerbyJS>
+# <hackernews.Item: 8437036 - Product Designer (employee #1) to Organize the World's Code – Blockspring (YC S14)>
+# <hackernews.Item: 8436584 - Django and iOS Hackers Needed – fix healthcare with Drchrono>
+# ...
+# ...
 ```
 Find Python jobs from monthly who is hiring thread:
 ```python
-    # Who is hiring
-    # https://news.ycombinator.com/item?id=8394339
+# Who is hiring
+# https://news.ycombinator.com/item?id=8394339
 
-    who_is_hiring = hn.get_item(8394339)
+who_is_hiring = hn.get_item(8394339)
 
-    for comment_id in who_is_hiring.kids:
-        comment = hn.get_item(comment_id)
-        if 'python' in comment.text.lower():
-            print comment.item_id
+for comment_id in who_is_hiring.kids:
+    comment = hn.get_item(comment_id)
+    if 'python' in comment.text.lower():
+        print comment.item_id
 
-    # 8395568
-    # 8394964
-    # ...
-    # ...
+# 8395568
+# 8394964
+# ...
+# ...
 ```
 API Reference
 =============
