@@ -226,7 +226,7 @@ Item](https://github.com/HackerNews/API/blob/master/README.md#items):
 | title       | The title of the story or poll.
 | parts       | A list of related pollopts, in display order.
 | raw         | original JSON response.
-
+| descendants | In the case of stories or polls, the total comment count.
 
 Class: `User`
 =============
