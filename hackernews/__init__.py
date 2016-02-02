@@ -220,6 +220,7 @@ class Item(object):
         self.dead = data.get('dead')
         self.parent = data.get('parent')
         self.kids = data.get('kids')
+        self.descendants = data.get('descendants')
         self.url = data.get('url')
         self.score = data.get('score')
         self.title = data.get('title')
