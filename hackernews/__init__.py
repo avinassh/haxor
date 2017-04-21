@@ -225,6 +225,7 @@ class Item(object):
         self.score = data.get('score')
         self.title = data.get('title')
         self.parts = data.get('parts')
+        self.time = datetime.datetime.fromtimestamp(data.get('time'))
         self.raw = json.dumps(data)
 
     def __repr__(self):
