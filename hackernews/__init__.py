@@ -48,7 +48,8 @@ class HackerNews(object):
     def __init__(self, version='v0'):
         """
         Args:
-            version (string): specifies Hacker News API version. Default is `v0`.
+            version (string): specifies Hacker News API version.
+            Default is `v0`.
 
         Raises:
           InvalidAPIVersion: If Hacker News version is not supported.
@@ -89,7 +90,8 @@ class HackerNews(object):
         """Returns Hacker News `Item` object.
 
         Args:
-            item_id (int or string): Unique item id of Hacker News story, comment etc.
+            item_id (int or string): Unique item id of Hacker News story,
+            comment etc.
 
         Returns:
             `Item` object representing Hacker News item.
