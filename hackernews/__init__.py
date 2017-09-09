@@ -48,7 +48,7 @@ class HTTPError(Exception):
 
 async def fetch(session, url):
     async with session.get(url) as response:
-        return await response.text()
+        return await response.json()
 
 
 async def fetch_all(session, urls, loop):
@@ -100,7 +100,7 @@ class HackerNews(object):
         loop = asyncio.get_event_loop()
         with aiohttp.ClientSession(loop=loop) as session:
             results = loop.run_until_complete(fetch_all(session, urls, loop))
-        return [json.loads(r) for r in results]
+        return results
 
     def get_user_by_ids(self, user_ids):
         """
