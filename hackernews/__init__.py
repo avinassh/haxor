@@ -58,6 +58,7 @@ class HackerNews(object):
             self.base_url = supported_api_versions[version]
         except KeyError:
             raise InvalidAPIVersion
+        self.session = requests.Session()
 
     def _get(self, url):
         """Internal method used for GET requests
@@ -72,7 +73,7 @@ class HackerNews(object):
           HTTPError: If HTTP request failed.
 
         """
-        response = requests.get(url)
+        response = self.session.get(url)
         if response.status_code == requests.codes.ok:
             return response
         else:
