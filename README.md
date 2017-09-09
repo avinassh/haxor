@@ -35,7 +35,7 @@ have unique item id. To get info of an item by item id:
 item = hn.get_item(8863)
 # >>> item.title
 # "My YC app: Dropbox - Throw away your USB drive"
-# >>> item.type
+# >>> item.item_type
 # story
 # >>> item.kids
 # [ 8952, 9224, 8917, ...]
