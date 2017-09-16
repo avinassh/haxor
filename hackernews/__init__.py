@@ -51,10 +51,29 @@ async def fetch(session, url):
         return await response.json()
 
 
+async def consumer(q, session, responses):
+    while True:
+        url = await q.get()
+        responses.append(await fetch(session=session, url=url))
+        q.task_done()
+
+
+async def producer(q, urls):
+    for url in urls:
+        await q.put(url)
+
+
 async def fetch_all(session, urls, loop):
-    tasks = [asyncio.ensure_future(fetch(session, url)) for url in urls]
-    results = await asyncio.gather(*tasks)
-    return results
+    MAX_NUM = min(2000, len(urls))
+    q = asyncio.Queue(maxsize=MAX_NUM)
+    responses = []
+    consumers = [asyncio.ensure_future(consumer(q, session, responses))
+                 for _ in range(MAX_NUM)]
+    await producer(q=q, urls=urls)
+    await q.join()
+    for c in consumers:
+        c.cancel()
+    return responses
 
 
 class HackerNews(object):
