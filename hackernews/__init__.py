@@ -266,7 +266,7 @@ class HackerNews(object):
         }
 
     def get_max_item(self):
-        """Returns list of item ids of current top stories
+        """The current largest item id
 
         Fetches data from URL:
             https://hacker-news.firebaseio.com/v0/maxitem.json
@@ -279,6 +279,31 @@ class HackerNews(object):
         """
         url = urljoin(self.base_url, 'maxitem.json')
         return self._get_sync(url)
+
+    def get_all(self):
+        """Returns ENTIRE Hacker News!
+
+        Downloads all the HN articles and returns them as Item objects
+
+        Returns:
+            `list` object containing ids of HN stories.
+        """
+        max_item = self.get_max_item()
+        return self.get_last(num=max_item)
+
+    def get_last(self, num):
+        """Returns last `num` of HN stories
+
+        Downloads all the HN articles and returns them as Item objects
+
+        Returns:
+            `list` object containing ids of HN stories.
+        """
+        max_item = self.get_max_item()
+        urls = [urljoin(self.item_url, F"{i}.json") for i in range(
+            max_item - num + 1, max_item + 1)]
+        result = self._get_async(urls=urls)
+        return [Item(r) for r in result]
 
 
 class Item(object):
