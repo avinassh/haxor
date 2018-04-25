@@ -13,12 +13,12 @@ from hackernews import HackerNews
 from hackernews import User
 
 
-class TestGetItemsByIDs(unittest.TestCase):
+class TestGetUsersByIDs(unittest.TestCase):
 
     def setUp(self):
         self.hn = HackerNews()
 
-    def test_get_max_item(self):
+    def test_get_users_by_ids(self):
         users = self.hn.get_users_by_ids(['pg','tptacek','jacquesm'])
         self.assertIsInstance(users, list)
         self.assertEqual(len(users), 3)

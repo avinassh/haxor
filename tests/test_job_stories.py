@@ -13,7 +13,7 @@ from hackernews import HackerNews
 from hackernews import Item
 
 
-class TestjobStories(unittest.TestCase):
+class TestJobStories(unittest.TestCase):
 
     def setUp(self):
         self.hn = HackerNews()
