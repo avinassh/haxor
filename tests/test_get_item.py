@@ -10,7 +10,7 @@ Tests get_item()
 import unittest
 
 from hackernews import HackerNews
-from hackernews import Item
+from hackernews import Item, User
 
 
 class TestGetItem(unittest.TestCase):
@@ -23,6 +23,13 @@ class TestGetItem(unittest.TestCase):
         self.assertIsInstance(item, Item)
         self.assertEqual(item.item_id, 8863)
         self.assertEqual(item.by, "dhouston")
+
+    def test_get_item_expand(self):
+        item = self.hn.get_item(8863, expand=True)
+        self.assertIsInstance(item, Item)
+        self.assertEqual(item.item_id, 8863)
+        self.assertIsInstance(item.by, User)
+        self.assertIsInstance(item.kids[0], Item)
 
     def tearDown(self):
     	self.hn.session.close()

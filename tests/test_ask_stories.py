@@ -10,6 +10,7 @@ Tests ask_stories()
 import unittest
 
 from hackernews import HackerNews
+from hackernews import Item
 
 
 class TestaskStories(unittest.TestCase):
@@ -20,7 +21,14 @@ class TestaskStories(unittest.TestCase):
     def test_ask_stories(self):
         ask_stories = self.hn.ask_stories()
         self.assertIsInstance(ask_stories, list)
+        self.assertIsInstance(ask_stories[0], Item)
         self.assertIsNotNone(ask_stories)
+
+    def test_ask_stories_raw(self):
+    	ask_stories = self.hn.ask_stories(raw=True)
+    	self.assertIsInstance(ask_stories, list)
+    	self.assertIsInstance(ask_stories[0], str)
+    	self.assertIsNotNone(ask_stories)
 
     def tearDown(self):
     	self.hn.session.close()

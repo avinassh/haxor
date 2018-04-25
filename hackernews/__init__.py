@@ -102,7 +102,7 @@ class HackerNews(object):
             data = None
         return data
 
-    async def _run_async_loop(self, urls):
+    async def _async_loop(self, urls):
         """Asynchronous internal method used to request multiple URLs
         
         Args:
@@ -131,7 +131,7 @@ class HackerNews(object):
         
         """
         loop = asyncio.get_event_loop()
-        results = loop.run_until_complete(self._run_async_loop(urls))
+        results = loop.run_until_complete(self._async_loop(urls))
         return results
 
     def _get_stories(self, page, limit):
@@ -156,7 +156,7 @@ class HackerNews(object):
         story_ids = self._get_sync(url)[:limit]
         return self.get_items_by_ids(item_ids=story_ids)
 
-    def get_item(self, item_id):
+    def get_item(self, item_id, expand=False):
         """Returns Hacker News `Item` object.
         
         Fetches the data from url:
@@ -167,6 +167,7 @@ class HackerNews(object):
         Args:
             item_id (int or string): Unique item id of Hacker News story,
             comment etc.
+            expand (bool): expand (bool): Flag to indicate whether to transform all IDs into objects.
         
         Returns:
             `Item` object representing Hacker News item.
@@ -180,18 +181,37 @@ class HackerNews(object):
 
         if not response:
             raise InvalidItemID
+        else:
+            item = Item(response)
+            if expand:
+                item.by = self.get_user(item.by)
+                item.kids = self.get_items_by_ids(item.kids) if item.kids else None
+                item.parent = self.get_item(item.parent) if item.parent else None
+                item.poll = self.get_item(item.poll) if item.poll else None
+                item.parts = self.get_items_by_ids(item.parts) if item.parts else None
 
-        return Item(response)
+        return item
 
-    def get_items_by_ids(self, item_ids):
-        """
-        Given a list of item ids, return all the Item objects
+    def get_items_by_ids(self, item_ids, item_type=None):
+        """Given a list of item ids, return all the Item objects
+
+        Args:
+            item_ids (obj): List of item IDs to query
+            item_type (str): (optional) Item type to filter results with
+
+        Returns:
+            List of `Item` objects for given item IDs and given item type
+
         """
         urls = [urljoin(self.item_url, F"{i}.json") for i in item_ids]
         result = self._run_async(urls=urls)
-        return [Item(r) for r in result if r]
+        items = [Item(r) for r in result if r]
+        if item_type:
+            return [item for item in items if item.item_type == item_type]
+        else:
+            return items
 
-    def get_user(self, user_id, submitted=False):
+    def get_user(self, user_id, expand=False):
         """Returns Hacker News `User` object.
         
         Fetches data from the url:
@@ -201,7 +221,7 @@ class HackerNews(object):
         
         Args:
             user_id (string): unique user id of a Hacker News user.
-            submitted (bool): Flag to indicate whether to query all submitted items.
+            expand (bool): Flag to indicate whether to transform all IDs into objects.
         
         Returns:
             `User` object representing a user on Hacker News.
@@ -215,8 +235,17 @@ class HackerNews(object):
 
         if not response:
             raise InvalidUserID
+        else:
+            user = User(response)
+            if expand and user.submitted:
+                submitted_items = self.get_items_by_ids(user.submitted)
+                user.stories = [item for item in submitted_items if item.item_type == 'story']
+                user.comments = [item for item in submitted_items if item.item_type == 'comment']
+                user.jobs = [item for item in submitted_items if item.item_type == 'job']
+                user.polls = [item for item in submitted_items if item.item_type == 'poll']
+                user.pollopts = [item for item in submitted_items if item.item_type == 'pollopt']
 
-        return User(response)
+        return user
 
     def get_users_by_ids(self, user_ids):
         """
@@ -226,65 +255,85 @@ class HackerNews(object):
         result = self._run_async(urls=urls)
         return [User(r) for r in result if r]
 
-    def top_stories(self, limit=None):
+    def top_stories(self, raw=False, limit=None):
         """Returns list of item ids of current top stories
         
         Args:
             limit (int): specifies the number of stories to be returned.
+            raw (bool): Flag to indicate whether to transform all objects into raw json.
         
         Returns:
             `list` object containing ids of top stories.
         
         """
-        return self._get_stories('topstories', limit)
+        if raw:
+            return [story.raw for story in self._get_stories('topstories', limit)]
+        else:
+            return self._get_stories('topstories', limit)
 
-    def new_stories(self, limit=None):
+    def new_stories(self, raw=False, limit=None):
         """Returns list of item ids of current new stories
         
         Args:
             limit (int): specifies the number of stories to be returned.
+            raw (bool): Flag to indicate whether to transform all objects into raw json.
         
         Returns:
             `list` object containing ids of new stories.
         
         """
-        return self._get_stories('newstories', limit)
+        if raw:
+            return [story.raw for story in self._get_stories('newstories', limit)]
+        else:
+            return self._get_stories('newstories', limit)
 
-    def ask_stories(self, limit=None):
+    def ask_stories(self, raw=False, limit=None):
         """Returns list of item ids of latest Ask HN stories
         
         Args:
             limit (int): specifies the number of stories to be returned.
+            raw (bool): Flag to indicate whether to transform all objects into raw json.
         
         Returns:
             `list` object containing ids of Ask HN stories.
         
         """
-        return self._get_stories('askstories', limit)
+        if raw:
+            return [story.raw for story in self._get_stories('askstories', limit)]
+        else:
+            return self._get_stories('askstories', limit)
 
-    def show_stories(self, limit=None):
+    def show_stories(self, raw=False, limit=None):
         """Returns list of item ids of latest Show HN stories
         
         Args:
             limit (int): specifies the number of stories to be returned.
+            raw (bool): Flag to indicate whether to transform all objects into raw json.
         
         Returns:
             `list` object containing ids of Show HN stories.
         
         """
-        return self._get_stories('showstories', limit)
+        if raw:
+            return [story.raw for story in self._get_stories('showstories', limit)]
+        else:
+            return self._get_stories('showstories', limit)
 
-    def job_stories(self, limit=None):
+    def job_stories(self, raw=False, limit=None):
         """Returns list of item ids of latest Job stories
         
         Args:
             limit (int): specifies the number of stories to be returned.
+            raw (bool): Flag to indicate whether to transform all objects into raw json.
         
         Returns:
             `list` object containing ids of Job stories.
         
         """
-        return self._get_stories('jobstories', limit)
+        if raw:
+            return [story.raw for story in self._get_stories('jobstories', limit)]
+        else:
+            return self._get_stories('jobstories', limit)
 
     def updates(self):
         """Returns list of item ids and user ids that have been
@@ -364,12 +413,13 @@ class Item(object):
         self.text = data.get('text')
         self.dead = data.get('dead')
         self.parent = data.get('parent')
+        self.poll = data.get('poll')
         self.kids = data.get('kids')
-        self.descendants = data.get('descendants')
         self.url = data.get('url')
         self.score = data.get('score')
         self.title = data.get('title')
         self.parts = data.get('parts')
+        self.descendants = data.get('descendants')
         self.time = datetime.datetime.fromtimestamp(data.get('time'))
         self.raw = json.dumps(data)
 

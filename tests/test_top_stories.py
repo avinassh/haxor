@@ -10,6 +10,7 @@ Tests top_stories()
 import unittest
 
 from hackernews import HackerNews
+from hackernews import Item
 
 
 class TestTopStories(unittest.TestCase):
@@ -20,6 +21,13 @@ class TestTopStories(unittest.TestCase):
     def test_top_stories(self):
         top_stories = self.hn.top_stories()
         self.assertIsInstance(top_stories, list)
+        self.assertIsInstance(top_stories[0], Item)
+        self.assertIsNotNone(top_stories)
+
+    def test_top_stories_raw(self):
+        top_stories = self.hn.ask_stories(raw=True)
+        self.assertIsInstance(top_stories, list)
+        self.assertIsInstance(top_stories[0], str)
         self.assertIsNotNone(top_stories)
 
     def tearDown(self):
