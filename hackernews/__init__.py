@@ -9,6 +9,7 @@ Unofficial Python wrapper for official Hacker News API
 
 from __future__ import absolute_import
 from __future__ import unicode_literals
+import asyncio
 import datetime
 import json
 import sys
@@ -16,7 +17,6 @@ from urllib.parse import urljoin
 
 import requests
 import aiohttp
-import asyncio
 
 from .settings import supported_api_versions
 
@@ -260,7 +260,7 @@ class HackerNews(object):
         
         Args:
             limit (int): specifies the number of stories to be returned.
-            raw (bool): Flag to indicate whether to transform all objects into raw json.
+            raw (bool): Flag to indicate whether to represent all objects in raw json.
         
         Returns:
             `list` object containing ids of top stories.
@@ -353,21 +353,25 @@ class HackerNews(object):
             'profiles': self.get_users_by_ids(user_ids=response['profiles'])
         }
 
-    def get_max_item(self):
+    def get_max_item(self, expand=False):
         """The current largest item id
         
         Fetches data from URL:
             https://hacker-news.firebaseio.com/v0/maxitem.json
         
         Args:
-            limit (int): specifies the number of stories to be returned.
+            expand (bool): Flag to indicate whether to transform all IDs into objects.
        
         Returns:
             `int` if successful.
         
         """
         url = urljoin(self.base_url, 'maxitem.json')
-        return self._get_sync(url)
+        response = self._get_sync(url)
+        if expand:
+            return self.get_item(response)
+        else:
+            return response
 
     def get_all(self):
         """Returns ENTIRE Hacker News!
@@ -381,7 +385,7 @@ class HackerNews(object):
         max_item = self.get_max_item()
         return self.get_last(num=max_item)
 
-    def get_last(self, num):
+    def get_last(self, num=10):
         """Returns last `num` of HN stories
         
         Downloads all the HN articles and returns them as Item objects
