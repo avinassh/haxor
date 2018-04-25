@@ -22,6 +22,8 @@ class TestaskStories(unittest.TestCase):
         self.assertIsInstance(ask_stories, list)
         self.assertIsNotNone(ask_stories)
 
+    def tearDown(self):
+    	self.hn.session.close()
 
 if __name__ == '__main__':
     unittest.main()

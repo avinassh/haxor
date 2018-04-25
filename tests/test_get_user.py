@@ -26,5 +26,8 @@ class TestGetUser(unittest.TestCase):
         self.assertEqual(user.created,
                          datetime.datetime.fromtimestamp(1160418092))
 
+    def tearDown(self):
+    	self.hn.session.close()
+
 if __name__ == '__main__':
     unittest.main()
