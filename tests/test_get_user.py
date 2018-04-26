@@ -12,6 +12,7 @@ import unittest
 
 from hackernews import HackerNews
 from hackernews import Item, User
+from hackernews import InvalidUserID
 
 
 class TestGetUser(unittest.TestCase):
@@ -25,6 +26,10 @@ class TestGetUser(unittest.TestCase):
         self.assertEqual(user.user_id, 'pg')
         self.assertEqual(user.created,
                          datetime.datetime.fromtimestamp(1160418092))
+        self.assertEqual(repr(user), '<hackernews.User: pg>')
+
+    def test_get_invalid_user(self):
+        self.assertRaises(InvalidUserID, self.hn.get_user, 'a')
 
     def test_get_user_expand(self):
         user = self.hn.get_user('avinassh', expand=True)

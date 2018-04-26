@@ -19,7 +19,7 @@ class TestGetUsersByIDs(unittest.TestCase):
         self.hn = HackerNews()
 
     def test_get_users_by_ids(self):
-        users = self.hn.get_users_by_ids(['pg','tptacek','jacquesm'])
+        users = self.hn.get_users_by_ids(['pg', 'tptacek', 'jacquesm'])
         self.assertIsInstance(users, list)
         self.assertEqual(len(users), 3)
         self.assertIsInstance(users[0], User)

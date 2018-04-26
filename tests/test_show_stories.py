@@ -19,13 +19,13 @@ class TestShowStories(unittest.TestCase):
         self.hn = HackerNews()
 
     def test_show_stories(self):
-        show_stories = self.hn.show_stories()
+        show_stories = self.hn.show_stories(limit=10)
         self.assertIsInstance(show_stories, list)
         self.assertIsInstance(show_stories[0], Item)
         self.assertIsNotNone(show_stories)
 
     def test_show_stories_raw(self):
-        show_stories = self.hn.ask_stories(raw=True)
+        show_stories = self.hn.show_stories(raw=True)
         self.assertIsInstance(show_stories, list)
         self.assertIsInstance(show_stories[0], str)
         self.assertIsNotNone(show_stories)

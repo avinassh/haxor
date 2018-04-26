@@ -95,11 +95,10 @@ class HackerNews(object):
             data (obj): Individual URL request's response corountine
         
         """
-        try:
-            async with session.get(url) as resp:
+        data = None
+        async with session.get(url) as resp:
+            if resp.status == 200:
                 data = await resp.json()
-        except:
-            data = None
         return data
 
     async def _async_loop(self, urls):
@@ -266,10 +265,10 @@ class HackerNews(object):
             `list` object containing ids of top stories.
         
         """
+        top_stories = self._get_stories('topstories', limit)
         if raw:
-            return [story.raw for story in self._get_stories('topstories', limit)]
-        else:
-            return self._get_stories('topstories', limit)
+            top_stories = [story.raw for story in top_stories]
+        return top_stories
 
     def new_stories(self, raw=False, limit=None):
         """Returns list of item ids of current new stories
@@ -282,10 +281,10 @@ class HackerNews(object):
             `list` object containing ids of new stories.
         
         """
+        new_stories = self._get_stories('newstories', limit)
         if raw:
-            return [story.raw for story in self._get_stories('newstories', limit)]
-        else:
-            return self._get_stories('newstories', limit)
+            new_stories = [story.raw for story in new_stories]
+        return new_stories
 
     def ask_stories(self, raw=False, limit=None):
         """Returns list of item ids of latest Ask HN stories
@@ -298,10 +297,10 @@ class HackerNews(object):
             `list` object containing ids of Ask HN stories.
         
         """
+        ask_stories = self._get_stories('askstories', limit)
         if raw:
-            return [story.raw for story in self._get_stories('askstories', limit)]
-        else:
-            return self._get_stories('askstories', limit)
+            ask_stories = [story.raw for story in ask_stories]
+        return ask_stories
 
     def show_stories(self, raw=False, limit=None):
         """Returns list of item ids of latest Show HN stories
@@ -314,10 +313,10 @@ class HackerNews(object):
             `list` object containing ids of Show HN stories.
         
         """
+        show_stories = self._get_stories('showstories', limit)
         if raw:
-            return [story.raw for story in self._get_stories('showstories', limit)]
-        else:
-            return self._get_stories('showstories', limit)
+            show_stories = [story.raw for story in show_stories]
+        return show_stories
 
     def job_stories(self, raw=False, limit=None):
         """Returns list of item ids of latest Job stories
@@ -330,10 +329,10 @@ class HackerNews(object):
             `list` object containing ids of Job stories.
         
         """
+        job_stories = self._get_stories('jobstories', limit)
         if raw:
-            return [story.raw for story in self._get_stories('jobstories', limit)]
-        else:
-            return self._get_stories('jobstories', limit)
+            job_stories = [story.raw for story in job_stories]
+        return job_stories
 
     def updates(self):
         """Returns list of item ids and user ids that have been
@@ -372,18 +371,6 @@ class HackerNews(object):
             return self.get_item(response)
         else:
             return response
-
-    def get_all(self):
-        """Returns ENTIRE Hacker News!
-        
-        Downloads all the HN articles and returns them as Item objects
-        
-        Returns:
-            `list` object containing ids of HN stories.
-        
-        """
-        max_item = self.get_max_item()
-        return self.get_last(num=max_item)
 
     def get_last(self, num=10):
         """Returns last `num` of HN stories
@@ -430,8 +417,6 @@ class Item(object):
     def __repr__(self):
         retval = '<hackernews.Item: {0} - {1}>'.format(
             self.item_id, self.title)
-        if sys.version_info.major < 3:
-            return retval.encode('utf-8', errors='backslashreplace')
         return retval
 
 
@@ -452,6 +437,4 @@ class User(object):
 
     def __repr__(self):
         retval = '<hackernews.User: {0}>'.format(self.user_id)
-        if sys.version_info.major < 3:
-            return retval.encode('utf-8', errors='backslashreplace')
         return retval

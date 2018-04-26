@@ -19,7 +19,7 @@ class TestAskStories(unittest.TestCase):
         self.hn = HackerNews()
 
     def test_ask_stories(self):
-        ask_stories = self.hn.ask_stories()
+        ask_stories = self.hn.ask_stories(limit=10)
         self.assertIsInstance(ask_stories, list)
         self.assertIsInstance(ask_stories[0], Item)
         self.assertIsNotNone(ask_stories)
