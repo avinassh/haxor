@@ -25,7 +25,7 @@ class TestUpdates(unittest.TestCase):
         self.assertIsInstance(updates['items'], list)
 
     def tearDown(self):
-   		self.hn.session.close()
-   		
+        self.hn.session.close()
+        
 if __name__ == '__main__':
     unittest.main()

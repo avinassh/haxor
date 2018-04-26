@@ -31,7 +31,7 @@ class TestShowStories(unittest.TestCase):
         self.assertIsNotNone(show_stories)
 
     def tearDown(self):
-    	self.hn.session.close()
+        self.hn.session.close()
 
 if __name__ == '__main__':
     unittest.main()

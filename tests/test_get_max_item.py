@@ -27,7 +27,7 @@ class TestGetMaxItem(unittest.TestCase):
         self.assertIsInstance(max_item, Item)
 
     def tearDown(self):
-    	self.hn.session.close()
+        self.hn.session.close()
 
 if __name__ == '__main__':
     unittest.main()

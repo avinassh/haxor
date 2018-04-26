@@ -31,7 +31,7 @@ class TestGetItemsByIDs(unittest.TestCase):
         self.assertIsInstance(items[0], Item)
 
     def tearDown(self):
-    	self.hn.session.close()
+        self.hn.session.close()
 
 if __name__ == '__main__':
     unittest.main()

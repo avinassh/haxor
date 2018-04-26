@@ -25,13 +25,13 @@ class TestAskStories(unittest.TestCase):
         self.assertIsNotNone(ask_stories)
 
     def test_ask_stories_raw(self):
-    	ask_stories = self.hn.ask_stories(raw=True)
-    	self.assertIsInstance(ask_stories, list)
-    	self.assertIsInstance(ask_stories[0], str)
-    	self.assertIsNotNone(ask_stories)
+        ask_stories = self.hn.ask_stories(raw=True)
+        self.assertIsInstance(ask_stories, list)
+        self.assertIsInstance(ask_stories[0], str)
+        self.assertIsNotNone(ask_stories)
 
     def tearDown(self):
-    	self.hn.session.close()
+        self.hn.session.close()
 
 if __name__ == '__main__':
     unittest.main()

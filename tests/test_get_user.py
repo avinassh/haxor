@@ -34,7 +34,7 @@ class TestGetUser(unittest.TestCase):
         self.assertIsInstance(user.stories[0], Item)
 
     def tearDown(self):
-    	self.hn.session.close()
+        self.hn.session.close()
 
 if __name__ == '__main__':
     unittest.main()
