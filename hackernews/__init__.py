@@ -49,14 +49,14 @@ class HackerNews(object):
 
     def __init__(self, version='v0'):
         """
-        
+
         Args:
             version (string): specifies Hacker News API version.
             Default is `v0`.
-        
+
         Raises:
           InvalidAPIVersion: If Hacker News version is not supported.
-        
+
         """
         try:
             self.base_url = supported_api_versions[version]
@@ -68,13 +68,13 @@ class HackerNews(object):
 
     def _get_sync(self, url):
         """Internal method used for GET requests
-        
+
         Args:
             url (str): URL to fetch
-        
+
         Returns:
             Individual URL request's response
-        
+
         Raises:
           HTTPError: If HTTP request failed.
         """
@@ -86,14 +86,14 @@ class HackerNews(object):
 
     async def _get_async(self, url, session):
         """Asynchronous internal method used for GET requests
-        
+
         Args:
             url (str): URL to fetch
             session (obj): aiohttp client session for async loop
-        
+
         Returns:
             data (obj): Individual URL request's response corountine
-        
+
         """
         data = None
         async with session.get(url) as resp:
@@ -103,16 +103,18 @@ class HackerNews(object):
 
     async def _async_loop(self, urls):
         """Asynchronous internal method used to request multiple URLs
-        
+
         Args:
             urls (list): URLs to fetch
-        
+
         Returns:
             responses (obj): All URL requests' response coroutines
-        
+
         """
         results = []
-        async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=False)) as session:
+        async with aiohttp.ClientSession(
+            connector=aiohttp.TCPConnector(ssl=False)
+        ) as session:
             for url in urls:
                 result = asyncio.ensure_future(self._get_async(url, session))
                 results.append(result)
@@ -121,13 +123,13 @@ class HackerNews(object):
 
     def _run_async(self, urls):
         """Asynchronous event loop execution
-        
+
         Args:
             urls (list): URLs to fetch
-        
+
         Returns:
             results (obj): All URL requests' responses
-        
+
         """
         loop = asyncio.get_event_loop()
         results = loop.run_until_complete(self._async_loop(urls))
@@ -138,18 +140,18 @@ class HackerNews(object):
         Hacker News has different categories (i.e. stories) like
         'topstories', 'newstories', 'askstories', 'showstories', 'jobstories'.
         This method, first fetches the relevant story ids of that category
-        
+
         The URL is: https://hacker-news.firebaseio.com/v0/<story_name>.json
-        
+
         e.g. https://hacker-news.firebaseio.com/v0/topstories.json
-        
+
         Then, asynchronously it fetches each story and returns the Item objects
-        
+
         The URL for individual story is:
             https://hacker-news.firebaseio.com/v0/item/<item_id>.json
-        
+
         e.g. https://hacker-news.firebaseio.com/v0/item/69696969.json
-        
+
         """
         url = urljoin(self.base_url, F"{page}.json")
         story_ids = self._get_sync(url)[:limit]
@@ -157,37 +159,40 @@ class HackerNews(object):
 
     def get_item(self, item_id, expand=False):
         """Returns Hacker News `Item` object.
-        
+
         Fetches the data from url:
             https://hacker-news.firebaseio.com/v0/item/<item_id>.json
-        
+
         e.g. https://hacker-news.firebaseio.com/v0/item/69696969.json
-        
+
         Args:
             item_id (int or string): Unique item id of Hacker News story,
             comment etc.
-            expand (bool): expand (bool): Flag to indicate whether to transform all IDs into objects.
-        
+            expand (bool): expand (bool): Flag to indicate whether to
+                transform all IDs into objects.
+
         Returns:
             `Item` object representing Hacker News item.
-        
+
         Raises:
           InvalidItemID: If corresponding Hacker News story does not exist.
-        
+
         """
         url = urljoin(self.item_url, F"{item_id}.json")
         response = self._get_sync(url)
 
         if not response:
             raise InvalidItemID
-        else:
-            item = Item(response)
-            if expand:
-                item.by = self.get_user(item.by)
-                item.kids = self.get_items_by_ids(item.kids) if item.kids else None
-                item.parent = self.get_item(item.parent) if item.parent else None
-                item.poll = self.get_item(item.poll) if item.poll else None
-                item.parts = self.get_items_by_ids(item.parts) if item.parts else None
+
+        item = Item(response)
+        if expand:
+            item.by = self.get_user(item.by)
+            item.kids = self.get_items_by_ids(item.kids) if item.kids else None
+            item.parent = self.get_item(item.parent) if item.parent else None
+            item.poll = self.get_item(item.poll) if item.poll else None
+            item.parts = (
+                self.get_items_by_ids(item.parts) if item.parts else None
+            )
 
         return item
 
@@ -212,37 +217,46 @@ class HackerNews(object):
 
     def get_user(self, user_id, expand=False):
         """Returns Hacker News `User` object.
-        
+
         Fetches data from the url:
             https://hacker-news.firebaseio.com/v0/user/<user_id>.json
-        
+
         e.g. https://hacker-news.firebaseio.com/v0/user/pg.json
-        
+
         Args:
             user_id (string): unique user id of a Hacker News user.
-            expand (bool): Flag to indicate whether to transform all IDs into objects.
-        
+            expand (bool): Flag to indicate whether to
+                transform all IDs into objects.
+
         Returns:
             `User` object representing a user on Hacker News.
-        
+
         Raises:
           InvalidUserID: If no such user exists on Hacker News.
-        
+
         """
         url = urljoin(self.user_url, F"{user_id}.json")
         response = self._get_sync(url)
 
         if not response:
             raise InvalidUserID
-        else:
-            user = User(response)
-            if expand and user.submitted:
-                submitted_items = self.get_items_by_ids(user.submitted)
-                user.stories = [item for item in submitted_items if item.item_type == 'story']
-                user.comments = [item for item in submitted_items if item.item_type == 'comment']
-                user.jobs = [item for item in submitted_items if item.item_type == 'job']
-                user.polls = [item for item in submitted_items if item.item_type == 'poll']
-                user.pollopts = [item for item in submitted_items if item.item_type == 'pollopt']
+
+        user = User(response)
+        if expand and user.submitted:
+            items = self.get_items_by_ids(user.submitted)
+            user_opt = {
+                'stories': 'story',
+                'comments': 'comment',
+                'jobs': 'job',
+                'polls': 'poll',
+                'pollopts': 'pollopt'
+            }
+            for key, value in user_opt.items():
+                setattr(
+                    user,
+                    key,
+                    [i for i in items if i.item_type == value]
+                )
 
         return user
 
@@ -256,14 +270,15 @@ class HackerNews(object):
 
     def top_stories(self, raw=False, limit=None):
         """Returns list of item ids of current top stories
-        
+
         Args:
             limit (int): specifies the number of stories to be returned.
-            raw (bool): Flag to indicate whether to represent all objects in raw json.
-        
+            raw (bool): Flag to indicate whether to represent all
+                objects in raw json.
+
         Returns:
             `list` object containing ids of top stories.
-        
+
         """
         top_stories = self._get_stories('topstories', limit)
         if raw:
@@ -272,14 +287,15 @@ class HackerNews(object):
 
     def new_stories(self, raw=False, limit=None):
         """Returns list of item ids of current new stories
-        
+
         Args:
             limit (int): specifies the number of stories to be returned.
-            raw (bool): Flag to indicate whether to transform all objects into raw json.
-        
+            raw (bool): Flag to indicate whether to transform all
+                objects into raw json.
+
         Returns:
             `list` object containing ids of new stories.
-        
+
         """
         new_stories = self._get_stories('newstories', limit)
         if raw:
@@ -288,14 +304,15 @@ class HackerNews(object):
 
     def ask_stories(self, raw=False, limit=None):
         """Returns list of item ids of latest Ask HN stories
-        
+
         Args:
             limit (int): specifies the number of stories to be returned.
-            raw (bool): Flag to indicate whether to transform all objects into raw json.
-        
+            raw (bool): Flag to indicate whether to transform all
+                objects into raw json.
+
         Returns:
             `list` object containing ids of Ask HN stories.
-        
+
         """
         ask_stories = self._get_stories('askstories', limit)
         if raw:
@@ -304,14 +321,15 @@ class HackerNews(object):
 
     def show_stories(self, raw=False, limit=None):
         """Returns list of item ids of latest Show HN stories
-        
+
         Args:
             limit (int): specifies the number of stories to be returned.
-            raw (bool): Flag to indicate whether to transform all objects into raw json.
-        
+            raw (bool): Flag to indicate whether to transform all
+                objects into raw json.
+
         Returns:
             `list` object containing ids of Show HN stories.
-        
+
         """
         show_stories = self._get_stories('showstories', limit)
         if raw:
@@ -320,14 +338,15 @@ class HackerNews(object):
 
     def job_stories(self, raw=False, limit=None):
         """Returns list of item ids of latest Job stories
-        
+
         Args:
             limit (int): specifies the number of stories to be returned.
-            raw (bool): Flag to indicate whether to transform all objects into raw json.
-        
+            raw (bool): Flag to indicate whether to transform all
+                objects into raw json.
+
         Returns:
             `list` object containing ids of Job stories.
-        
+
         """
         job_stories = self._get_stories('jobstories', limit)
         if raw:
@@ -337,13 +356,13 @@ class HackerNews(object):
     def updates(self):
         """Returns list of item ids and user ids that have been
         changed/updated recently.
-        
+
         Fetches data from URL:
             https://hacker-news.firebaseio.com/v0/updates.json
-        
+
         Returns:
             `dict` with two keys whose values are `list` objects
-        
+
         """
         url = urljoin(self.base_url, 'updates.json')
         response = self._get_sync(url)
@@ -354,16 +373,17 @@ class HackerNews(object):
 
     def get_max_item(self, expand=False):
         """The current largest item id
-        
+
         Fetches data from URL:
             https://hacker-news.firebaseio.com/v0/maxitem.json
-        
+
         Args:
-            expand (bool): Flag to indicate whether to transform all IDs into objects.
-       
+            expand (bool): Flag to indicate whether to transform all
+                IDs into objects.
+
         Returns:
             `int` if successful.
-        
+
         """
         url = urljoin(self.base_url, 'maxitem.json')
         response = self._get_sync(url)
@@ -372,14 +392,26 @@ class HackerNews(object):
         else:
             return response
 
-    def get_last(self, num=10):
-        """Returns last `num` of HN stories
-        
+    def get_all(self):
+        """Returns ENTIRE Hacker News!
+
         Downloads all the HN articles and returns them as Item objects
-        
+
         Returns:
             `list` object containing ids of HN stories.
-        
+
+        """
+        max_item = self.get_max_item()
+        return self.get_last(num=max_item)
+
+    def get_last(self, num=10):
+        """Returns last `num` of HN stories
+
+        Downloads all the HN articles and returns them as Item objects
+
+        Returns:
+            `list` object containing ids of HN stories.
+
         """
         max_item = self.get_max_item()
         urls = [urljoin(self.item_url, F"{i}.json") for i in range(
