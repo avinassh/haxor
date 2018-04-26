@@ -305,6 +305,14 @@ Description: Returns current largest item id or current largest `Item` object
 | ------------ | -------- | ---------- | ------------------------------- | ---------
 | `expand`   | bool      | No       | flag to indicate whether to transform ID into object | False
 
+`get_all`
+--------------
+
+Description: Returns all `Item` objects from HN
+
+**Parameters:**
+N/A
+
 `get_last`
 --------------
 
