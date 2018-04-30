@@ -389,7 +389,7 @@ Testing
 Run the test suite by running:
 
     python setup.py develop
-    python tests/run_tests.py
+    pytest tests
 
 LICENSE
 =======
