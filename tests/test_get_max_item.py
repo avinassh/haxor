@@ -10,6 +10,7 @@ Tests get_max_item()
 import unittest
 
 from hackernews import HackerNews
+from hackernews import Item
 
 
 class TestGetMaxItem(unittest.TestCase):
@@ -21,6 +22,12 @@ class TestGetMaxItem(unittest.TestCase):
         max_item_id = self.hn.get_max_item()
         self.assertIsInstance(max_item_id, int)
 
+    def test_get_max_item_expand(self):
+        max_item = self.hn.get_max_item(expand=True)
+        self.assertIsInstance(max_item, Item)
+
+    def tearDown(self):
+        self.hn.session.close()
 
 if __name__ == '__main__':
     unittest.main()
