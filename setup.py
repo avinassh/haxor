@@ -11,7 +11,7 @@ except (IOError, ImportError):
 with open('requirements.txt') as f:
     requirements = f.read().splitlines()
 
-version = '1.1'
+version = '1.2'
 
 setup(
     name='haxor',
