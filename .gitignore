@@ -41,3 +41,6 @@ nosetests.xml
 
 # virtualenv
 venv/
+
+# VS Code
+.vscode
