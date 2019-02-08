@@ -24,24 +24,29 @@ __all__ = [
     'User',
     'Item',
     'HackerNews',
+    'HackerNewsError',
     'InvalidAPIVersion',
     'InvalidItemID',
     'InvalidUserID']
 
 
-class InvalidItemID(Exception):
+class HackerNewsError(Exception):
     pass
 
 
-class InvalidUserID(Exception):
+class InvalidItemID(HackerNewsError):
     pass
 
 
-class InvalidAPIVersion(Exception):
+class InvalidUserID(HackerNewsError):
     pass
 
 
-class HTTPError(Exception):
+class InvalidAPIVersion(HackerNewsError):
+    pass
+
+
+class HTTPError(HackerNewsError):
     pass
 
 
