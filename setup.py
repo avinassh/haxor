@@ -11,7 +11,8 @@ except (IOError, ImportError):
 with open('requirements.txt') as f:
     requirements = f.read().splitlines()
 
-version = '1.2.2'
+with open('version.txt') as f:
+    version = f.read().strip()
 
 setup(
     name='haxor',
@@ -26,6 +27,7 @@ setup(
     license='MIT',
     description='Unofficial Python wrapper for Hacker News API',
     long_description=long_description,
+    long_description_content_type='text/markdown',
     classifiers=[
         'Development Status :: 3 - Alpha',
         'License :: OSI Approved :: MIT License',
