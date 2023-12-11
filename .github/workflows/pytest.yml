@@ -29,5 +29,13 @@ jobs:
         echo "0.0.0-dev" > version.txt
         python setup.py develop
 
+#    - name: Tests
+#      run: coverage run -m pytest tests
+
     - name: Tests
-      run: pytest
+      run: |
+        pytest tests --doctest-modules -v --cov-report term-missing --cov=hackernews
+        pytest hackernews --pycodestyle
+
+    - name: Coveralls
+      uses: coverallsapp/github-action@v2
