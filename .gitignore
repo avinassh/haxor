@@ -35,6 +35,7 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+/version.txt
 
 # OS Files
 .DS_Store
