@@ -1,7 +1,7 @@
 # haxor
 
 ![build](https://img.shields.io/github/actions/workflow/status/avinassh/haxor/pytest.yml)
-[![coverall](https://img.shields.io/coveralls/avinassh/haxor.svg)](https://coveralls.io/r/avinassh/haxor?branch=master)
+[![coverall](https://coveralls.io/repos/github/avinassh/haxor/badge.svg?branch=master)](https://coveralls.io/github/avinassh/haxor?branch=master)
 [![version](https://img.shields.io/pypi/v/haxor.svg)](https://pypi.python.org/pypi/haxor/)
 [![supported](https://img.shields.io/pypi/pyversions/haxor.svg)](https://pypi.python.org/pypi/haxor/)
 ![license](https://img.shields.io/pypi/l/haxor.svg)
