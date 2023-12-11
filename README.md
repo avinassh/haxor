@@ -388,6 +388,7 @@ Testing
 
 Run the test suite by running:
 
+    echo "0.0.0-dev" > version.txt
     python setup.py develop
     pytest tests
 
